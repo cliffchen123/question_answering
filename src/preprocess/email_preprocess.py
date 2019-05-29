@@ -134,4 +134,8 @@ with open(data_path+doc_file) as csvfile:
 
 		new_rows.append(new_row)
 doc_rows = new_rows
-import pdb;pdb.set_trace()
+
+''' write file '''
+f = open(data_path+'data.cpickle','w')
+cPickle.dump([doc_rows,test_rows],f)
+# import pdb;pdb.set_trace()
