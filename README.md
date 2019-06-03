@@ -1,6 +1,7 @@
 
 # Question Answering
-## information retrieval
+<i><b>information retrieval</b></i>
+
 ---
 
 ## Data set
