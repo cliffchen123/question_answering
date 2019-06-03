@@ -33,13 +33,12 @@ queries = data['data'][1]
 doc_rows_index = data['index'][0]
 query_rows_index = data['index'][1]
 
-filenameDir = [None]*2265
-subject_backgroundModel = np.array([0]*dict_size)
-doc_lm = []
-doc_description_lm = []
-backgroundLambda = 0.8  #short:0.8  long:0.9
+backgroundLambda = 0.8 
 write_top_num = 5
 
+''' generate document language model '''
+doc_lm = []
+subject_backgroundModel = np.array([0]*dict_size)
 for doc in docs:
     hasTerm = [0]*dict_size
     termNum = [1]*dict_size
@@ -56,6 +55,7 @@ for doc in docs:
 
 subject_backgroundModel = subject_backgroundModel/len(subject)
 
+''' generate query language model '''
 query_lm = []
 for query in queries:
     hasTerm = [0]*dict_size
@@ -69,13 +69,14 @@ for query in queries:
     termNum = np.array(termNum)/float(sum(termNum))
     query_lm.append(termNum)
 
-
+''' combine document model and backround model'''
 startTime = time.time()
 for i in range(doc_num):
     doc_lm[i] = (1-backgroundLambda)*doc_lm[i] + backgroundLambda*subject_backgroundModel 
     doc_lm[i] = np.log(doc_lm[i])
 print "Combine document model: "+str(time.time()-startTime)
 
+''' combine query model and backround model'''
 alpha=0
 mode='LM+b'
 for i in range(query_num):
@@ -83,7 +84,7 @@ for i in range(query_num):
         query_lm[i] = (1-alpha)*query_lm[i] + alpha*subject_backgroundModel[i]
 print "Read Query File: "+str(time.time()-startTime)
 
-
+''' calculate KL score '''
 startTime = time.time()
 score = [None]*query_num
 kl = np.matrix(query_lm) * np.matrix(np.transpose(doc_lm))
@@ -94,7 +95,7 @@ for i in range(query_num):
     score[i] = temp
 print "Calculate Score: "+str(time.time()-startTime)
 
-
+''' rank document and write file '''
 sorted_score = [None]*query_num
 for i in range(query_num):
     sorted_score[i] = sorted(score[i], key=lambda (k,v): (v,k), reverse = True)
