@@ -6,12 +6,12 @@
 
 import csv
 import cPickle
+from config import path
 
-data_path = '../data/'
 test_file = 'NABU FAQ for Worry Free Product 20190401.csv'
 doc_file = 'WF Cases 20190517.csv'
 
-
+''' find important string in email, and return index of the important string appearing and ending '''
 def find_important_tag_index(input_str):
 	
 	description_str = ['DESCRIPTION','Description','description','Issue:','[Issue]','Problem:']
@@ -20,6 +20,7 @@ def find_important_tag_index(input_str):
 			return input_str.find(i)+len(i)
 	return -1
 
+''' find the main of email (not include speacial tag:'[',':'',...) '''
 def find_main(input_str):
 	tag = ['[',':']
 	result = ''
@@ -39,12 +40,14 @@ def find_main(input_str):
 	else:
 		return ''
 
+''' determine the string is phone number or not'''
 def isPhone(input_str):
 	for i in input_str:
 		if (i>'9' or i<'0') and i!='+' and i!='-':
 			return False
 	return True
 
+''' remove garbage information from email '''
 def remove_garbage_information(input_str):
 	split_str = input_str.split(' ')
 	result = ''
@@ -56,19 +59,23 @@ def remove_garbage_information(input_str):
 
 
 test_rows = []
+test_rows_index = []
 isFirst_row = True
-with open(data_path+test_file) as csvfile:
+with open(path.data_path+test_file) as csvfile:
 	rows = csv.reader(csvfile)
-
+	
+	row_index = 0
 	for row in rows:
+		row_index += 1
 		if isFirst_row:
 			isFirst_row = False
 			continue
-		new_row = [None,None] # 0:description
+		new_row = ['',''] # 0:description 1:response email
 
-		description = row[3]
+
 
 		''' DESCRIPTION '''
+		description = row[3]
 		if find_main(description)!='': # determine the start of mail is main not tag
 			new_row[0] = find_main(description)
 		elif description.count('\n') != 0 and find_important_tag_index(description)!=-1: # find the key word: 'description',..
@@ -88,15 +95,24 @@ with open(data_path+test_file) as csvfile:
 			continue
 		new_row[0] = remove_garbage_information(new_row[0])
 		# import pdb;pdb.set_trace()
-		test_rows.append(new_row)
+		if new_row[0].split() == []:
+			continue
 
+		''' Response Email '''
+		new_row[1] = row[9]
+
+
+		test_rows.append(new_row)
+		test_rows_index.append(row_index)
 
 doc_rows = []
-with open(data_path+doc_file) as csvfile:
+doc_rows_index = []
+with open(path.data_path+doc_file) as csvfile:
 	rows = csv.reader(csvfile)
-	new_rows = []
 	isFirst_row = True
+	row_index = 0
 	for row in rows:
+		row_index += 1
 		subject = row[1]
 		description = row[2]
 
@@ -106,7 +122,7 @@ with open(data_path+doc_file) as csvfile:
 		if subject=='' or description=='':
 			continue
 
-		new_row = ['',''] # 1:subject 2:description
+		new_row = ['',''] # 0:subject 1:description
 		isUseful = True
 
 		''' Subject '''
@@ -132,10 +148,13 @@ with open(data_path+doc_file) as csvfile:
 		new_row[1] = new_row[1].replace('-','')
 		new_row[1] = remove_garbage_information(new_row[1])
 
-		new_rows.append(new_row)
-doc_rows = new_rows
+		if new_row[0].split()==[] or new_row[1].split()==[]:
+			continue
+
+		doc_rows.append(new_row)
+		doc_rows_index.append(row_index)
 
 ''' write file '''
-f = open(data_path+'data.cpickle','w')
-cPickle.dump([doc_rows,test_rows],f)
-# import pdb;pdb.set_trace()
+f = open(path.data_path+path.data_file,'w')
+cPickle.dump({'data':[doc_rows,test_rows],'index':[doc_rows_index,test_rows_index]},f)
+
