@@ -11,17 +11,17 @@ import time
 import numpy as np
 import operator
 import sys
-import cPickle
+import pickle
 import csv
 from config import path
 
 
-f = open(path.data_path+path.data_wordid)
-data = cPickle.load(f)
-f = open(path.data_path+path.dict_file)
-dictionary = cPickle.load(f)
-f = open(path.data_path+path.data_file)
-data_ori = cPickle.load(f)
+f = open(path.data_path+path.data_wordid,'rb')
+data = pickle.load(f)
+f = open(path.data_path+path.dict_file,'rb')
+dictionary = pickle.load(f)
+f = open(path.data_path+path.data_file,'rb')
+data_ori = pickle.load(f)
 
 # import pdb;pdb.set_trace()
 
@@ -54,6 +54,7 @@ for doc in docs:
     subject_backgroundModel = subject_backgroundModel+termNum
 
 subject_backgroundModel = subject_backgroundModel/len(subject)
+doc_lm = np.matrix(np.transpose(doc_lm))
 
 ''' generate query language model '''
 query_lm = []
@@ -74,7 +75,7 @@ startTime = time.time()
 for i in range(doc_num):
     doc_lm[i] = (1-backgroundLambda)*doc_lm[i] + backgroundLambda*subject_backgroundModel 
     doc_lm[i] = np.log(doc_lm[i])
-print "Combine document model: "+str(time.time()-startTime)
+print("Combine document model: "+str(time.time()-startTime))
 
 ''' combine query model and backround model'''
 alpha=0
@@ -82,23 +83,24 @@ mode='LM+b'
 for i in range(query_num):
     if mode=='LM+b':
         query_lm[i] = (1-alpha)*query_lm[i] + alpha*subject_backgroundModel[i]
-print "Read Query File: "+str(time.time()-startTime)
+query_lm = np.matrix(query_lm)
+print("Read Query File: "+str(time.time()-startTime))
 
 ''' calculate KL score '''
 startTime = time.time()
 score = [None]*query_num
-kl = np.matrix(query_lm) * np.matrix(np.transpose(doc_lm))
+kl = query_lm * doc_lm
 for i in range(query_num):
     temp = [None]*doc_num
     for j in range(doc_num):
         temp[j] = (j,kl.item(i,j))
     score[i] = temp
-print "Calculate Score: "+str(time.time()-startTime)
+print("Calculate Score: "+str(time.time()-startTime))
 
 ''' rank document and write file '''
 sorted_score = [None]*query_num
 for i in range(query_num):
-    sorted_score[i] = sorted(score[i], key=lambda (k,v): (v,k), reverse = True)
+    sorted_score[i] = sorted(score[i], key=lambda x:(x[1], x[0]), reverse = True)
 
 with open(path.result_path+'output.csv','w') as csvfile:
     writer = csv.writer(csvfile)

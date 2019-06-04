@@ -6,13 +6,13 @@
 
 
 
-import cPickle
+import pickle
 from config import path
 
 
 
-f = open(path.data_path+path.data_file,'r')
-data_file = cPickle.load(f)
+f = open(path.data_path+path.data_file,'rb')
+data_file = pickle.load(f)
 data = data_file['data']
 
 dictionary = dict()
@@ -29,7 +29,9 @@ for i in range(len(data)):
 
 frequency = 1
 unk_frequency = 0
-for i in dictionary.keys():
+
+keys = list(dictionary.keys())
+for i in keys:
 	if dictionary[i] <= frequency:
 		unk_frequency += dictionary[i]
 		dictionary.pop(i)
@@ -37,5 +39,5 @@ for i in dictionary.keys():
 
 dictionary['<unk>'] = unk_frequency
 
-fw = open(path.data_path+path.dict_file,'w')
-cPickle.dump(dictionary,fw)
+fw = open(path.data_path+path.dict_file,'wb')
+pickle.dump(dictionary,fw)
