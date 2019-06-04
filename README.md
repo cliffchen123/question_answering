@@ -31,6 +31,8 @@ $$ KL\left(Q||D\right)=\sum _{w\in V}\frac {f_{w\cdot Q}}{\left| Q\right| }\log 
 $Q$ is query, $D$ is document, $w$ is word, $V$ is all of the vocabulary, $f_{w\cdot Q}$ is frequency of the word $w$ in query $Q$
 
 <img src="http://latex.codecogs.com/gif.latex?\\ {KL(Q||D)}=\sum _{w\in V}" />
+<img src="http://latex.codecogs.com/gif.latex?\\ \frac {1}{K}" />
+
 
 ### IR_qustion2qustion.py
 We use the subject of "NABU FAQ for Worry Free Product 20190401.csv" as query, and the subject of "WF Cases 20190517.csv" as document. At the beginning of the code is LM generation, and then calculate the KL score between document LM and query LM. Finally, rank and select top N relevant subject to output<br> 
