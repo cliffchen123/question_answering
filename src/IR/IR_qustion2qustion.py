@@ -52,9 +52,7 @@ for doc in docs:
     termNum = np.array(termNum)/float(sum(termNum))
     doc_lm.append(termNum)
     subject_backgroundModel = subject_backgroundModel+termNum
-
 subject_backgroundModel = subject_backgroundModel/len(subject)
-doc_lm = np.matrix(np.transpose(doc_lm))
 
 ''' generate query language model '''
 query_lm = []
@@ -75,6 +73,7 @@ startTime = time.time()
 for i in range(doc_num):
     doc_lm[i] = (1-backgroundLambda)*doc_lm[i] + backgroundLambda*subject_backgroundModel 
     doc_lm[i] = np.log(doc_lm[i])
+doc_lm = np.matrix(np.transpose(doc_lm))
 print("Combine document model: "+str(time.time()-startTime))
 
 ''' combine query model and backround model'''
