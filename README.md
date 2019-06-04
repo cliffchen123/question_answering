@@ -27,6 +27,7 @@ Use dictionary to transfer the word of email to word ID.
 A:probability distribution over the words in a language.<br></i>
 
 We use document and query to generate document language model and query language model, and then calculate KL-Divergence score to rank the relevant document.
+
 <img src="http://latex.codecogs.com/gif.latex?\\ {KL(Q||D)}=\sum_{w\in{V}}\frac{f_{w,Q}}{|Q|}\log{P(w|D)}" />
 
 <img src="http://latex.codecogs.com/gif.latex?\\ Q" /> is query, <img src="http://latex.codecogs.com/gif.latex?\\ D" /> is document, <img src="http://latex.codecogs.com/gif.latex?\\ w" /> is word, <img src="http://latex.codecogs.com/gif.latex?\\ V" /> is all of the vocabulary, <img src="http://latex.codecogs.com/gif.latex?\\ f_{w,Q}" /> is frequency of the word <img src="http://latex.codecogs.com/gif.latex?\\ w" /> in query <img src="http://latex.codecogs.com/gif.latex?\\ Q" />
