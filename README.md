@@ -35,6 +35,6 @@ We use document and query to generate document language model and query language
 
 ### IR_qustion2qustion.py
 We use the subject of "NABU FAQ for Worry Free Product 20190401.csv" as query, and the subject of "WF Cases 20190517.csv" as document. At the beginning of the code is LM generation, and then calculate the KL score between document LM and query LM. Finally, rank and select top N relevant subject to output<br> 
-
+How to execute: email_preprocess.py -> create_dictionary.py -> word2id.py -> IR_qustion2qustion.py
 
 ---
