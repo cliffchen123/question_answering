@@ -17,15 +17,14 @@ index = data_file['index']
 
 f = open(path.data_path+path.dict_file,'rb')
 dictionary = pickle.load(f)
-keys = list(dictionary.keys())
 for i in range(len(data)):
 	for j in range(len(data[i])):
 		for k in range(len(data[i][j])):
 			vocs = data[i][j][k].split()
 			data[i][j][k] = []
 			for v in vocs:
-				if v in dictionary.keys():
-					data[i][j][k].append(keys.index(v))
+				if v in dictionary:
+					data[i][j][k].append(dictionary[v][0])
 				# else:
 				# 	data[i][j][k].append(dictionary.keys().index('<unk>'))
 

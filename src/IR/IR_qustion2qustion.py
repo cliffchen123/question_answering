@@ -14,7 +14,7 @@ import sys
 import pickle
 import csv
 from config import path
-
+from scipy.sparse import csr_matrix
 
 f = open(path.data_path+path.data_wordid,'rb')
 data = pickle.load(f)
@@ -40,9 +40,7 @@ write_top_num = 5
 doc_lm = []
 subject_backgroundModel = np.array([0]*dict_size)
 for doc in docs:
-    hasTerm = [0]*dict_size
     termNum = [1]*dict_size
-    termList = []
     subject = doc[0]
     description = doc[1]
 
@@ -57,9 +55,7 @@ subject_backgroundModel = subject_backgroundModel/len(subject)
 ''' generate query language model '''
 query_lm = []
 for query in queries:
-    hasTerm = [0]*dict_size
     termNum = [1]*dict_size
-    termList = []
     description = query[0]
 
     for i in description:
@@ -74,6 +70,10 @@ for i in range(doc_num):
     doc_lm[i] = (1-backgroundLambda)*doc_lm[i] + backgroundLambda*subject_backgroundModel 
     doc_lm[i] = np.log(doc_lm[i])
 doc_lm = np.matrix(np.transpose(doc_lm))
+# doc_lm = csr_matrix(doc_lm)
+# import pdb;pdb.set_trace()
+# with open(path.result_IR_path+'docLM.pickle','wb') as f:
+#     pickle.dump(doc_lm,f)
 print("Combine document model: "+str(time.time()-startTime))
 
 ''' combine query model and backround model'''
@@ -81,7 +81,7 @@ alpha=0
 mode='LM+b'
 for i in range(query_num):
     if mode=='LM+b':
-        query_lm[i] = (1-alpha)*query_lm[i] + alpha*subject_backgroundModel[i]
+        query_lm[i] = (1-alpha)*query_lm[i] + alpha*subject_backgroundModel
 query_lm = np.matrix(query_lm)
 print("Read Query File: "+str(time.time()-startTime))
 
@@ -101,7 +101,7 @@ sorted_score = [None]*query_num
 for i in range(query_num):
     sorted_score[i] = sorted(score[i], key=lambda x:(x[1], x[0]), reverse = True)
 
-with open(path.result_path+'output.csv','w') as csvfile:
+with open(path.result_IR_path+'output.csv','w') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['query description', 'query response email', 'retrieval subject', 'retrieval description'])
     for i in range(query_num):
