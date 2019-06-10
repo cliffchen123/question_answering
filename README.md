@@ -4,6 +4,12 @@
 
 ---
 
+## Advance preparation
+1.Execute linux.sh or windows.bat to create config link
+2.Put the data set in data folder
+
+---
+
 ## Data set
 document set: WF Cases 20190517.csv<br>
 query set:    NABU FAQ for Worry Free Product 20190401.csv
