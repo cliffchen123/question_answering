@@ -7,11 +7,12 @@
 
 
 import pickle
+import os
 from config import path
 
 
 
-f = open(path.data_path+path.data_file,'rb')
+f = open(os.path.join(path.data_path,path.data_file),'rb')
 data_file = pickle.load(f)
 data = data_file['data']
 
@@ -45,5 +46,5 @@ for i in keys:
 dictionary['<unk>'] = [index, unk_frequency]
 
 
-fw = open(path.data_path+path.dict_file,'wb')
+fw = open(os.path.join(path.data_path,path.dict_file),'wb')
 pickle.dump(dictionary,fw)

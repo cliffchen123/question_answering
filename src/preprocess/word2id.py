@@ -7,15 +7,16 @@
 
 
 import pickle
+import os
 from config import path
 
 
-f = open(path.data_path+path.data_file,'rb')
+f = open(os.path.join(path.data_path,path.data_file),'rb')
 data_file = pickle.load(f)
 data = data_file['data']
 index = data_file['index']
 
-f = open(path.data_path+path.dict_file,'rb')
+f = open(os.path.join(path.data_path,path.dict_file),'rb')
 dictionary = pickle.load(f)
 for i in range(len(data)):
 	for j in range(len(data[i])):
@@ -28,5 +29,5 @@ for i in range(len(data)):
 				# else:
 				# 	data[i][j][k].append(dictionary.keys().index('<unk>'))
 
-fw = open(path.data_path+path.data_wordid,'wb')
+fw = open(os.path.join(path.data_path,path.data_wordid),'wb')
 pickle.dump({'data':data,'index':index},fw)

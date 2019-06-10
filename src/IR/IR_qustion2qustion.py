@@ -14,13 +14,13 @@ import sys
 import pickle
 import csv
 from config import path
-from scipy.sparse import csr_matrix
+# from scipy.sparse import csr_matrix
 
-f = open(path.data_path+path.data_wordid,'rb')
+f = open(os.path.join(path.data_path,path.data_wordid),'rb')
 data = pickle.load(f)
-f = open(path.data_path+path.dict_file,'rb')
+f = open(os.path.join(path.data_path,path.dict_file),'rb')
 dictionary = pickle.load(f)
-f = open(path.data_path+path.data_file,'rb')
+f = open(os.path.join(path.data_path,path.data_file),'rb')
 data_ori = pickle.load(f)
 
 # import pdb;pdb.set_trace()
@@ -101,7 +101,7 @@ sorted_score = [None]*query_num
 for i in range(query_num):
     sorted_score[i] = sorted(score[i], key=lambda x:(x[1], x[0]), reverse = True)
 
-with open(path.result_IR_path+'output.csv','w') as csvfile:
+with open(os.path.join(path.result_IR_path,'output.csv'),'w') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['query description', 'query response email', 'retrieval subject', 'retrieval description'])
     for i in range(query_num):

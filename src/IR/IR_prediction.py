@@ -14,13 +14,13 @@ import sys
 import pickle
 import csv
 from config import path
-from scipy.sparse import csr_matrix
+# from scipy.sparse import csr_matrix
 
-f = open(path.data_path+path.data_wordid,'rb')
+f = open(os.path.join(path.data_path,path.data_wordid),'rb')
 data = pickle.load(f)
-f = open(path.data_path+path.dict_file,'rb')
+f = open(os.path.join(path.data_path,path.dict_file),'rb')
 dictionary = pickle.load(f)
-f = open(path.data_path+path.data_file,'rb')
+f = open(os.path.join(path.data_path,path.data_file),'rb')
 data_ori = pickle.load(f)
 
 # import pdb;pdb.set_trace()
@@ -67,7 +67,7 @@ print("Combine document model: "+str(time.time()-startTime))
 
 
 ''' generate query language model '''
-with open(path.result_IR_path+'oneQuery.csv','w', encoding='utf-8') as csvfile:
+with open(os.path.join(path.result_IR_path,'oneQuery.csv'),'w', encoding='utf-8') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['query description', 'retrieval subject', 'retrieval description'])
 while True:
@@ -110,7 +110,7 @@ while True:
     sorted_score = sorted(score, key=lambda x:(x[1], x[0]), reverse = True)
 
     
-    with open(path.result_IR_path+'oneQuery.csv','a', encoding='utf-8') as csvfile:
+    with open(os.path.join(path.result_IR_path,'oneQuery.csv'),'a', encoding='utf-8') as csvfile:
         writer = csv.writer(csvfile)
         
         for j in range(write_top_num):

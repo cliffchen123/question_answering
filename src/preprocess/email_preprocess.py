@@ -6,6 +6,7 @@
 
 import csv
 import pickle
+import os
 from config import path
 
 test_file = 'NABU FAQ for Worry Free Product 20190401.csv'
@@ -61,7 +62,7 @@ def remove_garbage_information(input_str):
 test_rows = []
 test_rows_index = []
 isFirst_row = True
-with open(path.data_path+test_file, encoding = 'utf8') as csvfile:
+with open(os.path.join(path.data_path,test_file), encoding = 'utf8') as csvfile:
 	rows = csv.reader(csvfile)
 	
 	row_index = 0
@@ -107,7 +108,7 @@ with open(path.data_path+test_file, encoding = 'utf8') as csvfile:
 
 doc_rows = []
 doc_rows_index = []
-with open(path.data_path+doc_file, encoding = 'utf8') as csvfile:
+with open(os.path.join(path.data_path,doc_file), encoding = 'utf8') as csvfile:
 	rows = csv.reader(csvfile)
 	isFirst_row = True
 	row_index = 0
@@ -155,6 +156,6 @@ with open(path.data_path+doc_file, encoding = 'utf8') as csvfile:
 		doc_rows_index.append(row_index)
 
 ''' write file '''
-f = open(path.data_path+path.data_file,'wb')
+f = open(os.path.join(path.data_path,path.data_file),'wb')
 pickle.dump({'data':[doc_rows,test_rows],'index':[doc_rows_index,test_rows_index]},f)
 

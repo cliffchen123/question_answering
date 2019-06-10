@@ -5,7 +5,8 @@
 ---
 
 ## Advance preparation
-1.Execute linux.sh or windows.bat to create config link <br>
+1.Execute linux.sh or windows.bat to create config link<br>
+2.Modify the variable root_path in src/config/path.py<br>
 2.Put the data set in data folder
 
 ---
@@ -47,3 +48,6 @@ It can predict one query which user input.<br>
 How to execute: email_preprocess.py -> create_dictionary.py -> word2id.py -> IR_prediction.py
 
 ---
+
+## To do
+IR_prediction.py GUI and show the simlarity value
