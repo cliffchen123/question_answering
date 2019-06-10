@@ -5,7 +5,7 @@
 ---
 
 ## Advance preparation
-1.Execute linux.sh or windows.bat to create config link
+1.Execute linux.sh or windows.bat to create config link <br>
 2.Put the data set in data folder
 
 ---
