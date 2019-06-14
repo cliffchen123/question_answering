@@ -14,7 +14,7 @@ import sys
 import pickle
 import csv
 from config import path
-import tkinter as tk
+# import tkinter as tk
 # from scipy.sparse import csr_matrix
 
 usingGUI = True
@@ -120,7 +120,13 @@ while True:
             index = sorted_score[j][0]
             # import pdb;pdb.set_trace()
             writer.writerow([query_str, data_ori['data'][0][index][0].replace('=',''), data_ori['data'][0][index][1]])
-			print("Retrieval Email Subject:\n")
-			print(data_ori['data'][0][index][0].replace('=',''))
-			print("Retrieval Email Description:\n")
-			print(data_ori['data'][0][index][1]])
+            print(str(j+1)+':')
+            print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+            print("Retrieval Email Subject:")
+            print("------------------------------------------------")
+            print(data_ori['data'][0][index][0].replace('=',''))
+            print("------------------------------------------------\n")
+            print("Retrieval Email Description:")
+            print("------------------------------------------------")
+            print(data_ori['data'][0][index][1])
+            print("------------------------------------------------\n")
