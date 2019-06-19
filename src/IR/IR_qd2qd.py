@@ -30,31 +30,27 @@ doc_num = len(data['data'][0])
 query_num = len(data['data'][1])
 docs = data['data'][0]
 queries = data['data'][1]
-# doc_rows_index = data['index'][0]
-# query_rows_index = data['index'][1]
+doc_rows_index = data['index'][0]
+query_rows_index = data['index'][1]
 
 backgroundLambda = 0.8 
 write_top_num = 5
 
 ''' generate document language model '''
 doc_lm = []
-subjectLambda = 0.7 # subject linear combine description
-descriptionLambda = 1 - subjectLambda
-backgroundModel = np.array([0]*dict_size)
+subject_backgroundModel = np.array([0]*dict_size)
 for doc in docs:
     termNum = [1]*dict_size
     subject = doc[0]
     description = doc[1]
 
     for i in subject:
-        termNum[int(i)] += subjectLambda
-    for i in description:
-        termNum[int(i)] += descriptionLambda
+        termNum[int(i)] += 1
 
     termNum = np.array(termNum)/float(sum(termNum))
     doc_lm.append(termNum)
-    backgroundModel = backgroundModel+termNum
-backgroundModel = backgroundModel/len(subject)
+    subject_backgroundModel = subject_backgroundModel+termNum
+subject_backgroundModel = subject_backgroundModel/len(subject)
 
 ''' generate query language model '''
 query_lm = []
@@ -71,9 +67,11 @@ for query in queries:
 ''' combine document model and backround model'''
 startTime = time.time()
 for i in range(doc_num):
-    doc_lm[i] = (1-backgroundLambda)*doc_lm[i] + backgroundLambda*backgroundModel 
+    doc_lm[i] = (1-backgroundLambda)*doc_lm[i] + backgroundLambda*subject_backgroundModel 
     doc_lm[i] = np.log(doc_lm[i])
 doc_lm = np.matrix(np.transpose(doc_lm))
+# doc_lm = csr_matrix(doc_lm)
+# import pdb;pdb.set_trace()
 # with open(path.result_IR_path+'docLM.pickle','wb') as f:
 #     pickle.dump(doc_lm,f)
 print("Combine document model: "+str(time.time()-startTime))
@@ -83,7 +81,7 @@ alpha=0
 mode='LM+b'
 for i in range(query_num):
     if mode=='LM+b':
-        query_lm[i] = (1-alpha)*query_lm[i] + alpha*backgroundModel
+        query_lm[i] = (1-alpha)*query_lm[i] + alpha*subject_backgroundModel
 query_lm = np.matrix(query_lm)
 print("Read Query File: "+str(time.time()-startTime))
 
