@@ -22,7 +22,8 @@ f = open(os.path.join(path.data_path,path.dict_file),'rb')
 dictionary = pickle.load(f)
 f = open(os.path.join(path.data_path,path.data_file),'rb')
 data_ori = pickle.load(f)
-
+f = open(os.path.join(path.data_path,path.BGM_file),'rb')
+backgroundModel = pickle.load(f)
 # import pdb;pdb.set_trace()
 
 dict_size = len(dictionary.keys())
@@ -40,7 +41,6 @@ write_top_num = 5
 doc_lm = []
 subjectLambda = 0.7 # subject linear combine description
 descriptionLambda = 1 - subjectLambda
-backgroundModel = np.array([0]*dict_size)
 for doc in docs:
     termNum = [1]*dict_size
     subject = doc[0]
@@ -53,8 +53,7 @@ for doc in docs:
 
     termNum = np.array(termNum)/float(sum(termNum))
     doc_lm.append(termNum)
-    backgroundModel = backgroundModel+termNum
-backgroundModel = backgroundModel/len(subject)
+
 
 ''' generate query language model '''
 query_lm = []

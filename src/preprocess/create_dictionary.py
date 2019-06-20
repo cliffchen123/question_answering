@@ -24,18 +24,19 @@ for i in range(len(data)):
 		for k in range(len(data[i][j])):
 			vocs = data[i][j][k].split()
 			for v in vocs:
+				v = v.lower()
 				if v not in dictionary.keys():
 					dictionary[v] = 1
 				else:
 					dictionary[v] += 1
 
-frequency = 1
+minFrequency = 1
 unk_frequency = 0
 
 index = 0
 keys = list(dictionary.keys())
 for i in keys:
-	if dictionary[i] <= frequency:
+	if dictionary[i] <= minFrequency:
 		unk_frequency += dictionary[i]
 		dictionary.pop(i)
 	else:
