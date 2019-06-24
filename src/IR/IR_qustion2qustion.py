@@ -24,7 +24,7 @@ f = open(os.path.join(path.data_path,path.data_file),'rb')
 data_ori = pickle.load(f)
 f = open(os.path.join(path.data_path,path.BGM_file),'rb')
 backgroundModel = pickle.load(f)
-# import pdb;pdb.set_trace()
+#import pdb;pdb.set_trace()
 
 dict_size = len(dictionary.keys())
 doc_num = len(data['data'][0])
@@ -34,12 +34,12 @@ queries = data['data'][1]
 # doc_rows_index = data['index'][0]
 # query_rows_index = data['index'][1]
 
-backgroundLambda = 0.8 
+backgroundLambda = 0 
 write_top_num = 5
 
 ''' generate document language model '''
 doc_lm = []
-subjectLambda = 0.7 # subject linear combine description
+subjectLambda = 1.0 # subject linear combine description
 descriptionLambda = 1 - subjectLambda
 for doc in docs:
     termNum = [1]*dict_size
@@ -53,7 +53,7 @@ for doc in docs:
 
     termNum = np.array(termNum)/float(sum(termNum))
     doc_lm.append(termNum)
-
+#import pdb;pdb.set_trace()
 
 ''' generate query language model '''
 query_lm = []
@@ -102,11 +102,11 @@ sorted_score = [None]*query_num
 for i in range(query_num):
     sorted_score[i] = sorted(score[i], key=lambda x:(x[1], x[0]), reverse = True)
 
-with open(os.path.join(path.result_IR_path,'output.csv'),'w') as csvfile:
+with open(os.path.join(path.result_IR_path,'output.csv'),'w', encoding='utf-8-sig') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['query description', 'query response email', 'retrieval subject', 'retrieval description'])
     for i in range(query_num):
         for j in range(write_top_num):
             index = sorted_score[i][j][0]
-            # import pdb;pdb.set_trace()
+            #import pdb;pdb.set_trace()
             writer.writerow([data_ori['data'][1][i][0], data_ori['data'][1][i][1], data_ori['data'][0][index][0].replace('=',''), data_ori['data'][0][index][1]])

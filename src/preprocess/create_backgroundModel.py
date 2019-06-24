@@ -15,6 +15,7 @@ from config import path
 
 ''' Load PTB dataset '''
 train, val, test = chainer.datasets.get_ptb_words()
+allData = train.tolist()+val.tolist()+test.tolist()
 print('train length: ', train.shape)
 print('val   length: ', val.shape)
 print('test  length: ', test.shape)
@@ -27,7 +28,7 @@ with open(os.path.join(path.data_path,path.dict_file),'rb') as f:
 	local_dict = pickle.load(f)
 f = open(os.path.join(path.data_path,path.data_wordid),'rb')
 data = pickle.load(f)
-docs = data['data'][0]
+data = data['data']
 
 count = 0
 for v in local_dict:
@@ -37,31 +38,39 @@ print("Number of vocabulary in local database: "+str(len(local_dict)))
 print("overlap word: "+str(count))
 
 ''' combine ptb background model and mail background model '''
+# mail background model
 backgroundModel_lambda = 0.8
 local_backgroundModel = np.array([0.0]*len(local_dict))
-for doc in docs:
-	termNum = [0]*len(local_dict)
-	subject = doc[0]
-	description = doc[1]
-	if subject==description==[]:
-		continue
-	for i in subject:
-		termNum[int(i)] += 1
-	for i in description:
-		termNum[int(i)] += 1
-	termNum = np.array(termNum)/float(sum(termNum))
-	local_backgroundModel = local_backgroundModel+termNum
+for DorQ in range(len(data)):
+	for eachData in range(len(data[DorQ])):
+		for dataType in range(len(data[DorQ][eachData])):
+			for v in data[DorQ][eachData][dataType]:
+				local_backgroundModel[v]+=1
 local_backgroundModel = local_backgroundModel/sum(local_backgroundModel)
+
+# ptb background model
 backgroundModel = [0]*len(local_dict)
-for v in train:
+for v in allData:
 	if ptb_id_word_dict[v] in ptb_dict and ptb_id_word_dict[v] in local_dict:
 		backgroundModel[ local_dict[ptb_id_word_dict[v]][0] ]+=1
-
 backgroundModel = np.array(backgroundModel)
 backgroundModel = backgroundModel/float(sum(backgroundModel))
 backgroundModel = backgroundModel_lambda*backgroundModel + (1-backgroundModel_lambda)*local_backgroundModel
 
 with open(os.path.join(path.data_path,path.BGM_file),'wb') as fw:
 	pickle.dump(backgroundModel,fw)
+
+
+''' create key word list '''
+with open(os.path.join(path.data_path,path.keyword_file),'w') as fw:
+	sort_dict = sorted(local_dict.items(),key=lambda x:x[1][0])
+	word_list = [x[0] for x in sort_dict]
+	keyword = dict(zip(word_list,backgroundModel.tolist()))
+	keyword = sorted(keyword.items(),key=lambda x:x[1],reverse=True)
+	for v in keyword:
+		fw.write(v[0]+' , '+str(v[1])+'\n')
+	
+
+
 # import pdb;pdb.set_trace()
 # Kneser-Ney smoothing

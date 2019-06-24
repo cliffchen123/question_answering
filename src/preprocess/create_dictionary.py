@@ -19,12 +19,12 @@ data = data_file['data']
 # dictionary: {word1:(index1,frequency1),word2:(index2,frequency2),...}
 dictionary = dict()
 
-for i in range(len(data)):
-	for j in range(len(data[i])):
-		for k in range(len(data[i][j])):
-			vocs = data[i][j][k].split()
+for DorQ in range(len(data)):
+	for eachData in range(len(data[DorQ])):
+		for dataType in range(len(data[DorQ][eachData])):
+			vocs = data[DorQ][eachData][dataType].split()
 			for v in vocs:
-				v = v.lower()
+				# v = v.lower()
 				if v not in dictionary.keys():
 					dictionary[v] = 1
 				else:

@@ -1,0 +1,59 @@
+Combine document model: 19.925872564315796
+Read Query File: 20.04669213294983
+Calculate Score: 27.029926776885986
+> /share/nas165/cliffchen123/question_answering/src/IR/IR_qustion2qustion.py(112)<module>()
+-> writer.writerow([data_ori['data'][1][i][0], data_ori['data'][1][i][1], data_ori['data'][0][index][0].replace('=','').encode('utf8'), data_ori['data'][0][index][1].encode('utf8')])
+(Pdb) Traceback (most recent call last):
+  File "src/IR/IR_qustion2qustion.py", line 112, in <module>
+    writer.writerow([data_ori['data'][1][i][0], data_ori['data'][1][i][1], data_ori['data'][0][index][0].replace('=','').encode('utf8'), data_ori['data'][0][index][1].encode('utf8')])
+  File "src/IR/IR_qustion2qustion.py", line 112, in <module>
+    writer.writerow([data_ori['data'][1][i][0], data_ori['data'][1][i][1], data_ori['data'][0][index][0].replace('=','').encode('utf8'), data_ori['data'][0][index][1].encode('utf8')])
+  File "/usr/lib/python3.5/bdb.py", line 48, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/usr/lib/python3.5/bdb.py", line 66, in dispatch_line
+    self.user_line(frame)
+  File "/usr/lib/python3.5/pdb.py", line 259, in user_line
+    self.interaction(frame, None)
+  File "/usr/lib/python3.5/pdb.py", line 346, in interaction
+    self._cmdloop()
+  File "/usr/lib/python3.5/pdb.py", line 319, in _cmdloop
+    self.cmdloop()
+  File "/usr/lib/python3.5/cmd.py", line 126, in cmdloop
+    line = input(self.prompt)
+OSError: [Errno 9] Bad file descriptor
+Combine document model: 39.24083685874939
+Read Query File: 39.436686515808105
+Calculate Score: 56.26858329772949
+> /share/nas165/cliffchen123/question_answering/src/IR/IR_qustion2qustion.py(112)<module>()
+-> writer.writerow([data_ori['data'][1][i][0], data_ori['data'][1][i][1], data_ori['data'][0][index][0].replace('=',''), data_ori['data'][0][index][1]])
+(Pdb) Traceback (most recent call last):
+  File "src/IR/IR_qustion2qustion.py", line 112, in <module>
+    writer.writerow([data_ori['data'][1][i][0], data_ori['data'][1][i][1], data_ori['data'][0][index][0].replace('=',''), data_ori['data'][0][index][1]])
+  File "src/IR/IR_qustion2qustion.py", line 112, in <module>
+    writer.writerow([data_ori['data'][1][i][0], data_ori['data'][1][i][1], data_ori['data'][0][index][0].replace('=',''), data_ori['data'][0][index][1]])
+  File "/usr/lib/python3.5/bdb.py", line 48, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/usr/lib/python3.5/bdb.py", line 66, in dispatch_line
+    self.user_line(frame)
+  File "/usr/lib/python3.5/pdb.py", line 259, in user_line
+    self.interaction(frame, None)
+  File "/usr/lib/python3.5/pdb.py", line 346, in interaction
+    self._cmdloop()
+  File "/usr/lib/python3.5/pdb.py", line 319, in _cmdloop
+    self.cmdloop()
+  File "/usr/lib/python3.5/cmd.py", line 126, in cmdloop
+    line = input(self.prompt)
+OSError: [Errno 9] Bad file descriptor
+Combine document model: 39.74467396736145
+Read Query File: 39.933554887771606
+Calculate Score: 54.015389919281006
+Combine document model: 43.004496574401855
+Read Query File: 43.17764759063721
+Calculate Score: 46.87958312034607
+Traceback (most recent call last):
+  File "src/IR/IR_qustion2qustion.py", line 112, in <module>
+    writer.writerow([data_ori['data'][1][i][0], data_ori['data'][1][i][1], data_ori['data'][0][index][0].replace('=',''), data_ori['data'][0][index][1]])
+UnicodeEncodeError: 'big5' codec can't encode character '\xf1' in position 801: illegal multibyte sequence
+Combine document model: 20.641952514648438
+Read Query File: 20.76494812965393
+Calculate Score: 28.35871148109436

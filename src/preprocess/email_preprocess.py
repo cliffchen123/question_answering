@@ -7,6 +7,7 @@
 import csv
 import pickle
 import os
+import re
 from config import path
 
 test_file = 'NABU FAQ for Worry Free Product 20190401.csv'
@@ -48,15 +49,26 @@ def isPhone(input_str):
 			return False
 	return True
 
+''' remove garbage tag from vocabulary '''
+def removeTag(voc):
+	voc = re.sub(r'[();,.?:_=#“\[\]{}!/\>\<\*\'\"-]', '', voc)
+	return voc
+
 ''' remove garbage information from email '''
+garbage_information = ['@','http:','https:','www.'] # email adress or phone number or email
 def remove_garbage_information(input_str):
 	split_str = input_str.split(' ')
 	result = ''
 	for i in split_str:
-		if i.find('@')!=-1 or isPhone(i): # if str is email adress or phone number
+		if any(x in i for x in garbage_information):
 			continue
+		i = removeTag(i)
+		if i.isnumeric():
+			continue
+		i = re.sub(r'[/\\]', ' ', i)
 		result += (' '+i)
 	return result
+
 
 
 test_rows = []
@@ -76,7 +88,7 @@ with open(os.path.join(path.data_path,test_file), encoding = 'utf8') as csvfile:
 
 
 		''' DESCRIPTION '''
-		description = row[3]
+		description = row[3].lower()
 		if find_main(description)!='': # determine the start of mail is main not tag
 			new_row[0] = find_main(description)
 		elif description.count('\n') != 0 and find_important_tag_index(description)!=-1: # find the key word: 'description',..
@@ -100,7 +112,7 @@ with open(os.path.join(path.data_path,test_file), encoding = 'utf8') as csvfile:
 			continue
 
 		''' Response Email '''
-		new_row[1] = row[9]
+		new_row[1] = remove_garbage_information(row[9].lower())
 
 
 		test_rows.append(new_row)
@@ -114,8 +126,8 @@ with open(os.path.join(path.data_path,doc_file), encoding = 'utf8') as csvfile:
 	row_index = 0
 	for row in rows:
 		row_index += 1
-		subject = row[1]
-		description = row[2]
+		subject = row[1].lower()
+		description = row[2].lower()
 
 		if isFirst_row:
 			isFirst_row = False
@@ -134,7 +146,7 @@ with open(os.path.join(path.data_path,doc_file), encoding = 'utf8') as csvfile:
 			elif subject[i]==']':
 				isUseful = True
 			elif isUseful:
-				new_row[0] += subject[i]
+				new_row[0] = remove_garbage_information(subject[i])
 
 		''' Description '''
 		if description.find('[') == -1 and description.find(':') == -1: # if not including any tag
