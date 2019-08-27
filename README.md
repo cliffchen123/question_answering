@@ -7,7 +7,7 @@
 ## Advance preparation
 1.Execute linux.sh or windows.bat to create config link<br>
 2.Modify the variable root_path in src/config/path.py<br>
-2.Put the data set in data folder
+3.Put the data set in data folder
 
 ---
 
